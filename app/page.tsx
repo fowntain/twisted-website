@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { ArrowDown, Github, Twitter, Youtube, Play, Pause, X, Film } from "lucide-react"
+import { ArrowDown, ArrowRight, Github, Twitter, Youtube, Play, Pause, X, Film } from "lucide-react"
 import Link from "next/link"
 
 export default function Home() {
@@ -38,22 +38,25 @@ export default function Home() {
       root: null,
       rootMargin: "0px",
       threshold: 0.1,
-    }
+    };
 
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+    const observerCallback: IntersectionObserverCallback = (entries, observer) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("animate-in")
+          const el = entry.target as HTMLElement;
+          const all = Array.from(document.querySelectorAll('.animate-on-scroll'));
+          const idx = all.indexOf(el);
+          const delay = Math.min(idx * 50, 300) + 100;
+          el.style.transitionDelay = `${delay}ms`;
+          el.classList.add('animate-in');
+          observer.unobserve(el);
         }
-      })
-    }
+      });
+    };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions)
-
-    const elements = document.querySelectorAll(".animate-on-scroll")
-    elements.forEach((el) => observer.observe(el))
-
-    return () => observer.disconnect()
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, [])
 
   const scrollToDescription = () => {
@@ -128,13 +131,24 @@ export default function Home() {
           </h1>
           <p className="mt-4 text-xl md:text-2xl max-w-md text-gray-300">The next-gen storm chasing experience.</p>
 
-          <button
-            onClick={scrollToDescription}
-            className="mt-12 flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300"
-          >
-            <span>Discover More</span>
-            <ArrowDown className="animate-bounce" />
-          </button>
+          <div className="mt-12 flex items-center gap-6">
+            <button
+              onClick={scrollToDescription}
+              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300"
+            >
+              <span>Discover More</span>
+              <ArrowDown className="animate-bounce" />
+            </button>
+            <Link
+              href="https://www.roblox.com/games/6161235818/Twisted-BETA"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-300"
+            >
+              <span>Play Now</span>
+              <ArrowRight />
+            </Link>
+          </div>
         </div>
 
         <div className="absolute top-8 right-8 z-20 flex gap-4">
@@ -170,28 +184,28 @@ export default function Home() {
         className="relative min-h-screen bg-gradient-to-b from-gray-900 to-black py-24"
         style={{
           zIndex: 20,
-          marginTop: "-5vh", 
+          marginTop: "-10vh", 
         }}
       >
         <div className="container mx-auto px-6 pt-36">
           {" "}
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 bg-gradient-to-r from-purple-400 via-blue-300 to-purple-500 text-transparent bg-clip-text">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 animate-on-scroll opacity-0 translate-y-8 bg-gradient-to-r from-purple-400 via-blue-300 to-purple-500 text-transparent bg-clip-text">
                 About Twisted
               </h2>
-              <p className="text-gray-300 mb-8 text-lg animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-100">
+              <p className="text-gray-300 mb-8 text-lg animate-on-scroll opacity-0 translate-y-8">
                 Twisted is an exhilarating Roblox experience that puts you in the heart of tornado alley in the
                 fictional state of Keysota. Chase, track, and witness the raw power of tornadoes as they tear across the
                 landscape.
               </p>
-              <p className="text-gray-300 mb-8 text-lg animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-200">
-                Team up with friends or venture alone as a storm chaser, using advanced weather tracking tools to
-                predict tornado paths and capture the perfect footage. Will you stay at a safe distance, or risk it all
+              <p className="text-gray-300 mb-8 text-lg animate-on-scroll opacity-0 translate-y-8">
+                Team up with friends or venture alone as a storm chaser, using your radar and your wits to
+                predict tornado paths, capture the perfect footage, and gather the all-important data. Will you stay at a safe distance, or risk it all
                 to get the perfect shot?
               </p>
 
-              <div className="flex gap-6 mb-8 animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-300">
+              <div className="flex gap-6 mb-8 animate-on-scroll opacity-0 translate-y-8">
                 <Link href="https://twitter.com/Twisted_RBX" className="text-gray-400 hover:text-white transition-colors">
                   <Twitter size={24} />
                   <span className="sr-only">Twitter</span>
@@ -204,13 +218,13 @@ export default function Home() {
 
               <Link
                 href="https://www.roblox.com/games/6161235818/Twisted-BETA"
-                className="inline-block bg-gradient-to-r from-purple-600 to-blue-300 hover:from-purple-700 hover:to-blue-400 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-400"
+                className="inline-block bg-gradient-to-r from-purple-600 to-blue-300 hover:from-purple-700 hover:to-blue-400 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 animate-on-scroll opacity-0 translate-y-8"
               >
                 Play Now
               </Link>
             </div>
 
-            <div className="relative animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-300">
+            <div className="relative animate-on-scroll opacity-0 translate-y-8">
               <div className="relative bg-gray-900 p-6 rounded-lg">
                 <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-blue-300 text-transparent bg-clip-text">
                   Game Features
@@ -226,7 +240,7 @@ export default function Home() {
                   </li>
                   <li className="flex items-start">
                     <span className="text-purple-400 mr-2">•</span>
-                    <span>Advanced storm tracking and prediction tools</span>
+                    <span>Advanced radar simulations</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-purple-400 mr-2">•</span>
@@ -245,12 +259,12 @@ export default function Home() {
 
       <section className="relative min-h-screen bg-black py-24" style={{ zIndex: 20 }}>
         <div className="container mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 bg-gradient-to-r from-purple-400 via-blue-300 to-purple-500 text-transparent bg-clip-text">
+          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center animate-on-scroll opacity-0 translate-y-8 bg-gradient-to-r from-purple-400 via-blue-300 to-purple-500 text-transparent bg-clip-text">
             Experience Keysota
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-900 p-6 rounded-lg animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-100">
+            <div className="bg-gray-900 p-6 rounded-lg animate-on-scroll opacity-0 translate-y-8">
               <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-blue-300 text-transparent bg-clip-text">
                 Dynamic Weather
               </h3>
@@ -260,7 +274,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="bg-gray-900 p-6 rounded-lg animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-200">
+            <div className="bg-gray-900 p-6 rounded-lg animate-on-scroll opacity-0 translate-y-8">
               <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-blue-300 text-transparent bg-clip-text">
                 Tornado Variety
               </h3>
@@ -270,7 +284,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="bg-gray-900 p-6 rounded-lg animate-on-scroll opacity-0 translate-y-8 transition-all duration-700 delay-300">
+            <div className="bg-gray-900 p-6 rounded-lg animate-on-scroll opacity-0 translate-y-8">
               <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-blue-300 text-transparent bg-clip-text">
                 Vast Landscape
               </h3>

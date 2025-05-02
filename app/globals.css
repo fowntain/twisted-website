@@ -6,11 +6,38 @@
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 0, 0, 0;
   --background-end-rgb: 0, 0, 0;
+
+  --radius: 0.5rem;
+
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 265 89% 78%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 12 6.5% 15.1%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 265 89% 78%;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
   overflow-x: hidden;
 }
 
@@ -18,14 +45,23 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .animate-on-scroll {
+    opacity: 0 !important;
+    transform: translateY(20px) !important;
+    will-change: opacity, transform;
+    transition: opacity 0.8s cubic-bezier(0.13, 0.62, 0.26, 0.94),
+      transform 0.8s cubic-bezier(0.13, 0.62, 0.26, 0.94);
+  }
+  .animate-on-scroll.animate-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
 }
 
-/* Smooth scrolling for the entire page */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -38,13 +74,7 @@ html {
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.5s ease-out forwards;
-}
-
-/* Apple-style scroll animations */
-.animate-on-scroll {
-  transition-property: opacity, transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.8s cubic-bezier(0.13, 0.62, 0.26, 0.94) forwards;
 }
 
 .animate-in {
@@ -52,19 +82,21 @@ html {
   transform: translateY(0) !important;
 }
 
-/* Parallax effect */
+.animate-on-scroll:not(.animate-in) {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
 .parallax {
   transform: translateY(var(--parallax-y, 0));
   transition: transform 0.1s ease-out;
 }
 
-/* Ensure text gradients display properly */
 .bg-clip-text {
   -webkit-background-clip: text;
   background-clip: text;
 }
 
-/* Make gradients more pronounced */
 [class*="bg-gradient"] {
   background-size: 200% 100%;
   animation: gradient-shift 3s ease infinite;
